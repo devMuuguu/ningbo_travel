@@ -57,69 +57,38 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   // Navigation Requests (HTML / Page Loads)
+  // Navigation Requests: Network-First (with Cache Fallback for offline)
   if (request.mode === "navigate") {
     event.respondWith(
-      caches.open(CACHE_NAME).then(async (cache) => {
-        // Match request or fallback to index.html (ignoring query params added by Android launch)
-        const cached =
+      (async () => {
+        try {
+          // Always try network first so fresh HTML + new asset hashes are served immediately
+          const networkResponse = await fetch(request);
+          if (networkResponse && networkResponse.status === 200) {
+            const cache = await caches.open(CACHE_NAME);
+            cache.put(request, networkResponse.clone());
+            cache.put("/index.html", networkResponse.clone());
+            return networkResponse;
+          }
+        } catch (err) {
+          // Network failed or device is offline -> Fallback to Cache
+        }
+
+        // Return cached HTML if offline
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse =
           (await cache.match(request, { ignoreSearch: true })) ||
           (await cache.match("/index.html"));
 
-        // Fetch fresh version in background
-        fetch(request)
-          .then(async (res) => {
-            const contentType = res.headers.get("content-type");
-            if (
-              !res ||
-              res.status !== 200 ||
-              !contentType ||
-              !contentType.includes("text/html")
-            ) {
-              return;
-            }
-
-            const freshHtml = await res.clone().text();
-
-            if (cached) {
-              const cachedHtml = await cached.text();
-              // Check if any asset bundle hash changed in HTML
-              if (extractBundles(freshHtml) !== extractBundles(cachedHtml)) {
-                await cache.put(request, res.clone());
-                await cache.put("/index.html", res.clone());
-                const clients = await self.clients.matchAll();
-                clients.forEach((c) =>
-                  c.postMessage({ type: "UPDATE_AVAILABLE" }),
-                );
-                return;
-              }
-            }
-
-            await cache.put(request, res.clone());
-            await cache.put("/index.html", res.clone());
-          })
-          .catch(() => {});
-
-        if (cached) return cached;
-
-        // First visit / Network Fallback
-        try {
-          const fresh = await fetch(request);
-          if (fresh && fresh.status === 200) {
-            cache.put(request, fresh.clone());
-            cache.put("/index.html", fresh.clone());
-          }
-          return fresh;
-        } catch {
-          // If offline and cache miss, fallback to index.html
-          const indexFallback = await cache.match("/index.html");
-          if (indexFallback) return indexFallback;
-
-          return new Response("Offline", {
-            status: 503,
-            headers: { "Content-Type": "text/html" },
-          });
+        if (cachedResponse) {
+          return cachedResponse;
         }
-      }),
+
+        return new Response("Offline", {
+          status: 503,
+          headers: { "Content-Type": "text/html" },
+        });
+      })(),
     );
     return;
   }
