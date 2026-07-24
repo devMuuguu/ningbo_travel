@@ -13,7 +13,7 @@
     <div class="flex overflow-x-auto scrollbar-none gap-2 bg-[#131b29] p-1.5 rounded-xl border border-[#2f3f58]">
       <button 
         @click="activeCategory = 'attractions'" 
-        class="flex-1 min-w-[120px] shrink-0 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-center whitespace-nowrap"
+        class="flex-1 shrink py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
         :class="activeCategory === 'attractions' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-300 hover:text-white hover:bg-[#1b2637]'"
       >
         <Landmark class="w-4 h-4 shrink-0" />
@@ -23,7 +23,7 @@
 
       <button 
         @click="activeCategory = 'malls'" 
-        class="flex-1 min-w-[120px] shrink-0 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-center whitespace-nowrap"
+        class="flex-1 shrink py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
         :class="activeCategory === 'malls' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-300 hover:text-white hover:bg-[#1b2637]'"
       >
         <ShoppingBag class="w-4 h-4 shrink-0" />
@@ -33,7 +33,7 @@
 
       <button 
         @click="activeCategory = 'cafes'" 
-        class="flex-1 min-w-[120px] shrink-0 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 text-center whitespace-nowrap"
+        class="flex-1 shrink py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
         :class="activeCategory === 'cafes' ? 'bg-amber-500 text-black shadow-md' : 'text-slate-300 hover:text-white hover:bg-[#1b2637]'"
       >
         <Coffee class="w-4 h-4 shrink-0" />
