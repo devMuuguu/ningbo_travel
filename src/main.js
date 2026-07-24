@@ -7,6 +7,7 @@ const app = createApp(App);
 app.use(router);
 app.mount("#app");
 
+// Register PWA Service Worker for Offline Capabilities
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
@@ -29,6 +30,7 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
       })
       .catch(() => {});
 
+    // Single guard to prevent infinite reloads
     let refreshing = false;
     const reloadPage = () => {
       if (!refreshing) {
@@ -38,7 +40,9 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
     };
 
     navigator.serviceWorker.addEventListener("message", (event) => {
-      if (event.data?.type === "UPDATE_AVAILABLE") reloadPage();
+      if (event.data?.type === "UPDATE_AVAILABLE") {
+        reloadPage();
+      }
     });
 
     navigator.serviceWorker.addEventListener("controllerchange", reloadPage);

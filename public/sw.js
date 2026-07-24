@@ -1,5 +1,7 @@
-const CACHE_NAME = "ub-ningbo-v6";
+const CACHE_NAME = "ub-ningbo-v7";
 const ASSETS_TO_CACHE = [
+  "/",
+  "/index.html",
   "/manifest.json",
   "/icon.svg",
   "/beijing-shaghai_train.png",
@@ -41,6 +43,7 @@ self.addEventListener("message", (event) => {
   }
 });
 
+// Matches all referenced scripts and CSS files in assets directory
 function extractBundles(html) {
   const m = html.match(/assets\/[a-zA-Z0-9_.-]+/g);
   return m ? [...new Set(m)].sort().join("|") : "";
@@ -53,13 +56,16 @@ self.addEventListener("fetch", (event) => {
   if (url.protocol !== "http:" && url.protocol !== "https:") return;
   if (url.origin !== self.location.origin) return;
 
-  // Navigation: stale-while-revalidate
+  // Navigation Requests (HTML / Page Loads)
   if (request.mode === "navigate") {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
-        const cached = await cache.match(request);
+        // Match request or fallback to index.html (ignoring query params added by Android launch)
+        const cached =
+          (await cache.match(request, { ignoreSearch: true })) ||
+          (await cache.match("/index.html"));
 
-        // Fetch fresh copy in background
+        // Fetch fresh version in background
         fetch(request)
           .then(async (res) => {
             const contentType = res.headers.get("content-type");
@@ -76,8 +82,10 @@ self.addEventListener("fetch", (event) => {
 
             if (cached) {
               const cachedHtml = await cached.text();
+              // Check if any asset bundle hash changed in HTML
               if (extractBundles(freshHtml) !== extractBundles(cachedHtml)) {
                 await cache.put(request, res.clone());
+                await cache.put("/index.html", res.clone());
                 const clients = await self.clients.matchAll();
                 clients.forEach((c) =>
                   c.postMessage({ type: "UPDATE_AVAILABLE" }),
@@ -87,18 +95,25 @@ self.addEventListener("fetch", (event) => {
             }
 
             await cache.put(request, res.clone());
+            await cache.put("/index.html", res.clone());
           })
           .catch(() => {});
 
         if (cached) return cached;
 
+        // First visit / Network Fallback
         try {
           const fresh = await fetch(request);
           if (fresh && fresh.status === 200) {
             cache.put(request, fresh.clone());
+            cache.put("/index.html", fresh.clone());
           }
           return fresh;
         } catch {
+          // If offline and cache miss, fallback to index.html
+          const indexFallback = await cache.match("/index.html");
+          if (indexFallback) return indexFallback;
+
           return new Response("Offline", {
             status: 503,
             headers: { "Content-Type": "text/html" },
@@ -109,7 +124,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static assets: cache-first
+  // Static Assets (Cache-First)
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
