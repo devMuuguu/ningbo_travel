@@ -1,0 +1,6 @@
+{
+  "name": "UB - Ningbo Travel Guide",
+  "description": "Travel itinerary and guide from Ulaanbaatar to Ningbo for VNL finals",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

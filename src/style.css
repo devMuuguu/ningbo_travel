@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+:root {
+  /* wallet / navy shell */
+  --wallet: #131b29;
+  --wallet-2: #1b2637;
+  --wallet-3: #26344a;
+  --hair: #2f3f58;
+  /* ticket paper */
+  --stub: #f8f4ea;
+  --stub-2: #efe7d6;
+  --paper-line: #d6ccb6;
+  --ink: #171f2c;
+  --ink-soft: #55617a;
+  /* light text on navy */
+  --sky: #eef2f8;
+  --sky-soft: #93a2bd;
+  /* mode + status accents */
+  --air: #e05643;
+  --rail: #3b86ef;
+  --match: #e0a52e;
+  --local: #7688a3;
+  --go: #37c07a;
+  --wait: #e0a52e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--wallet);
+  color: var(--sky);
+}
+
+body {
+  margin: 0;
+  background: var(--wallet);
+  color: var(--sky);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 80px; /* Space for mobile sticky tabbar */
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 30px;
+  }
+}
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-width: 0;
+}
+
+/* Common Typography */
+.eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--match);
+  margin-bottom: 6px;
+}
+
+h2.page-title {
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--sky);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Navigation Tabs */
+.tabs-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(19, 27, 41, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hair);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.tabs-nav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 0;
+  cursor: grab;
+  user-select: none;
+  scroll-behavior: smooth;
+}
+
+.tabs-nav:active {
+  cursor: grabbing;
+}
+
+.tabs-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--sky-soft);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--sky);
+  background: var(--wallet-2);
+}
+
+.tab-btn.router-link-exact-active,
+.tab-btn.active {
+  color: var(--sky);
+  background: var(--wallet-3);
+  border-color: var(--hair);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tab-btn.router-link-exact-active .icon,
+.tab-btn.active .icon {
+  color: var(--match);
+}
+
+/* Mobile Bottom Navigation Bar - Draggable & Scrollable */
+.mobile-nav-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(19, 27, 41, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--hair);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .mobile-nav-container {
+    display: none;
+  }
+}
+
+.mobile-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+  scroll-behavior: smooth;
+  padding: 2px 4px;
+}
+
+.mobile-nav:active {
+  cursor: grabbing;
+}
+
+.mobile-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--sky-soft);
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  min-width: 68px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mobile-tab-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--sky);
+}
+
+.mobile-tab-item.router-link-exact-active,
+.mobile-tab-item.active {
+  color: var(--match);
+  background: var(--wallet-3);
+  font-weight: 600;
+  border: 1px solid rgba(224, 165, 46, 0.25);
+}
+
+/* Custom Card & Ticket styling */
+.card-panel {
+  background: var(--wallet-2);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Status Board Pill */
+.pill {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pill.go {
+  background: rgba(55, 192, 122, 0.15);
+  color: var(--go);
+  border: 1px solid rgba(55, 192, 122, 0.3);
+}
+.pill.wait {
+  background: rgba(224, 165, 46, 0.15);
+  color: var(--wait);
+  border: 1px solid rgba(224, 165, 46, 0.3);
+}
+.pill.air {
+  background: rgba(224, 86, 67, 0.15);
+  color: var(--air);
+  border: 1px solid rgba(224, 86, 67, 0.3);
+}
+.pill.rail {
+  background: rgba(59, 134, 239, 0.15);
+  color: var(--rail);
+  border: 1px solid rgba(59, 134, 239, 0.3);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--match);
+  color: #111;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--wallet-3);
+  color: var(--sky);
+  font-weight: 500;
+  font-size: 13.5px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--hair);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background: var(--hair);
+}
+
+/* Ticket Paper Effect for expanded ticket view */
+.ticket-paper {
+  background: var(--stub);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: inset 0 0 0 1px var(--paper-line);
+}
+.ticket-paper .k {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.ticket-paper .v {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Smooth Transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}

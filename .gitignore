@@ -1,0 +1,6 @@
+.vercel
+node_modules
+
+E-itinerary.pdf
+E-receipt.pdf
+.env*

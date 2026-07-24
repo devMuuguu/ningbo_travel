@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="128" fill="#131b29"/>
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#26344a" stroke-width="12"/>
+  <!-- Plane icon -->
+  <path d="M256 120 L280 210 L390 240 L390 270 L280 250 L280 340 L310 370 L310 390 L256 375 L202 390 L202 370 L232 340 L232 250 L122 270 L122 240 L232 210 Z" fill="#e0a52e"/>
+  <!-- Volleyball details -->
+  <circle cx="256" cy="140" r="28" fill="#e05643"/>
+  <path d="M256 120 A 20 20 0 0 1 256 160 A 20 20 0 0 1 256 120" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="256" y="440" font-family="sans-serif" font-weight="bold" font-size="38" fill="#eef2f8" text-anchor="middle" letter-spacing="4">UB - NINGBO</text>
+</svg>
