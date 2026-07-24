@@ -24,6 +24,12 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       });
     }).catch(() => {});
 
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+        window.location.reload();
+      }
+    });
+
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (!refreshing) {
