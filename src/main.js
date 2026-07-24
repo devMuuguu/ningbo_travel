@@ -24,14 +24,6 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       });
     }).catch(() => {});
 
-    // Listen for update notifications from SW (bundle hash changed)
-    navigator.serviceWorker.addEventListener('message', (event) => {
-      if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
-        window.location.reload();
-      }
-    });
-
-    // Reload once when the new SW takes over
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (!refreshing) {
