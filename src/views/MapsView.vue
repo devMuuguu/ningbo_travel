@@ -63,7 +63,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=Beijing+Capital+International+Airport&hl=en&z=13&output=embed"
-            class="w-full h-48 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-48 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -86,7 +86,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=Beijing+South+Railway+Station&hl=en&z=15&output=embed"
-            class="w-full h-48 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-48 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -115,7 +115,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=31.22211586149014,121.45399211177829&hl=en&z=16&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -137,7 +137,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=31.2508246,121.4506144&hl=en&z=14&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -160,7 +160,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=Shanghai+South+Railway+Station&hl=en&z=14&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -189,7 +189,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=29.861388,121.536331&hl=en&z=15&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -212,7 +212,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=29.888324,121.839722&hl=en&z=16&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -235,7 +235,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=29.9047592,121.8408489&hl=en&z=15&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
@@ -258,7 +258,7 @@
           <iframe 
             loading="lazy" 
             src="https://maps.google.com/maps?q=Ningbo+Lishe+International+Airport&hl=en&z=13&output=embed"
-            class="w-full h-44 border-0 bg-[#131b29]"
+            class="w-full h-56 sm:h-44 border-0 bg-[#131b29]"
           ></iframe>
           <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
             <div>
