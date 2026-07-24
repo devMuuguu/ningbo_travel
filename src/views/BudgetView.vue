@@ -22,8 +22,14 @@
           <Calculator class="w-4 h-4 text-amber-400" />
           <span>Валют хөрвүүлэгч (USD / MNT / CNY)</span>
         </div>
-        <span class="text-xs font-mono text-slate-400"
-          >Ханш: $1 ≈ ₮3,589 ≈ ¥0.15</span
+        <span v-if="loading" class="text-xs font-mono text-slate-500 animate-pulse"
+          >Ачаалж байна...</span
+        >
+        <span v-else-if="error" class="text-xs font-mono text-red-400" :title="error"
+          >Алдаа · Үндсэн ханш ашиглаж байна</span
+        >
+        <span v-else class="text-xs font-mono text-slate-400"
+          >Ханш: $1 ≈ ₮{{ Math.round(usdRate) }} ≈ ¥{{ cnyRate }} · {{ lastUpdated }}</span
         >
       </div>
 
@@ -221,7 +227,7 @@
 
         <!-- Grand Total -->
         <div
-          class="p-5 bg-gradient-to-r from-amber-500/20 via-blue-500/10 to-emerald-500/20 flex items-center justify-between"
+          class="p-5 bg-linear-to-r from-amber-500/20 via-blue-500/10 to-emerald-500/20 flex items-center justify-between"
         >
           <div>
             <div class="text-base font-bold text-slate-100">
@@ -245,13 +251,13 @@
 <script setup>
 import { ref } from "vue";
 import { Calculator } from "lucide-vue-next";
+import { useCurrencyRates } from "../util/currencyRate/useCurrencyRates.js";
 
-const usdRate = 3589; // MNT per USD
-const cnyRate = 0.15; // CNY per USD
+const { usdRate, cnyRate, loading, error, lastUpdated, refresh } = useCurrencyRates();
 
 const usdAmount = ref(1211.88);
-const mntAmount = ref(Math.round(1211.88 * usdRate));
-const cnyAmount = ref(Number((1211.88 * cnyRate).toFixed(2)));
+const mntAmount = ref(Math.round(1211.88 * 3589));
+const cnyAmount = ref(Number((1211.88 * 0.15).toFixed(2)));
 
 function convertFromUsd() {
   if (!usdAmount.value) {
@@ -259,8 +265,8 @@ function convertFromUsd() {
     cnyAmount.value = 0;
     return;
   }
-  mntAmount.value = Math.round(usdAmount.value * usdRate);
-  cnyAmount.value = Number((usdAmount.value * cnyRate).toFixed(2));
+  mntAmount.value = Math.round(usdAmount.value * usdRate.value);
+  cnyAmount.value = Number((usdAmount.value * cnyRate.value).toFixed(2));
 }
 
 function convertFromMnt() {
@@ -269,8 +275,8 @@ function convertFromMnt() {
     cnyAmount.value = 0;
     return;
   }
-  usdAmount.value = Number((mntAmount.value / usdRate).toFixed(2));
-  cnyAmount.value = Number((usdAmount.value * cnyRate).toFixed(2));
+  usdAmount.value = Number((mntAmount.value / usdRate.value).toFixed(2));
+  cnyAmount.value = Number((usdAmount.value * cnyRate.value).toFixed(2));
 }
 
 function convertFromCny() {
@@ -279,7 +285,7 @@ function convertFromCny() {
     mntAmount.value = 0;
     return;
   }
-  usdAmount.value = Number((cnyAmount.value / cnyRate).toFixed(2));
-  mntAmount.value = Math.round(usdAmount.value * usdRate);
+  usdAmount.value = Number((cnyAmount.value / cnyRate.value).toFixed(2));
+  mntAmount.value = Math.round(usdAmount.value * usdRate.value);
 }
 </script>

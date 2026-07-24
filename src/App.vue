@@ -4,7 +4,7 @@
   >
     <!-- Top Header -->
     <header
-      class="bg-gradient-to-b from-[#1b2637] to-[#131b29] border-b border-[#2f3f58] pt-6 pb-5"
+      class="bg-linear-to-b from-[#1b2637] to-[#131b29] border-b border-[#2f3f58] pt-6 pb-5"
     >
       <div class="wrap">
         <div class="flex flex-wrap items-center justify-between gap-3 mb-3">

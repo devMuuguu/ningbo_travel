@@ -164,7 +164,7 @@
           <iframe
             loading="lazy"
             :src="item.mapUrl"
-            class="w-full h-full border-0 min-h-[220px]"
+            class="w-full h-full border-0 min-h-55"
             title="Location Map"
           ></iframe>
           <div
