@@ -38,31 +38,39 @@ self.addEventListener("message", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Skip non-HTTP(S) requests (chrome-extension://, moz-extension://, etc.)
+  if (url.protocol !== "http:" && url.protocol !== "https:") return;
+
   // Network-first for navigations — ensures fresh index.html with new bundle hashes
-  if (event.request.mode === "navigate") {
+  if (request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request)
+      fetch(request)
         .then((response) => {
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           return response;
         })
-        .catch(() => caches.match(event.request)),
+        .catch(() => caches.match(request)),
     );
     return;
   }
 
-  // Cache-first for static assets (images, fonts, etc.)
+  // Cache-first for same-origin static assets only
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    caches.match(request).then((cached) => {
       if (cached) return cached;
-      return fetch(event.request)
+      return fetch(request)
         .then((response) => {
           if (!response || response.status !== 200 || response.type !== "basic") {
             return response;
           }
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           return response;
         })
         .catch(() => new Response("", { status: 408, statusText: "Offline" }));
