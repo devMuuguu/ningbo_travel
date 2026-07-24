@@ -7,79 +7,35 @@
       class="bg-linear-to-b from-[#1b2637] to-[#131b29] border-b border-[#2f3f58] pt-6 pb-5"
     >
       <div class="wrap">
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <div
-            class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#e0a52e]"
+        <!-- Offline / Online Indicator & PWA badge -->
+        <div class="flex flex-wrap justify-end mb-3">
+          <span
+            :class="
+              isOnline
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+            "
+            class="px-2.5 py-1 rounded-full text-xs font-mono font-medium border flex items-center gap-1.5"
           >
-            <span class="w-3 h-0.5 bg-[#e0a52e]"></span>
-            <span>VNL Finals 2026 · Аяллын хөтөч</span>
-          </div>
-
-          <!-- Offline / Online Indicator & PWA badge -->
-          <div class="flex items-center gap-2">
             <span
+              class="w-2 h-2 rounded-full"
               :class="
-                isOnline
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                  : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
               "
-              class="px-2.5 py-1 rounded-full text-xs font-mono font-medium border flex items-center gap-1.5"
-            >
-              <span
-                class="w-2 h-2 rounded-full"
-                :class="
-                  isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
-                "
-              ></span>
-              {{ isOnline ? "Онлайн" : "Оффлайн горим" }}
-            </span>
-          </div>
+            ></span>
+            {{ isOnline ? "Онлайн" : "Оффлайн горим" }}
+          </span>
         </div>
 
-        <h1
+        <p
           class="font-['Oswald'] text-3xl sm:text-5xl font-semibold uppercase tracking-wide text-[#eef2f8] leading-none mb-2"
         >
           Улаанбаатар <span class="text-[#e0a52e]">→</span> Ningbo
-        </h1>
+        </p>
         <p class="text-sm sm:text-base text-[#93a2bd] max-w-2xl mb-4">
           07.29 – 08.03 · UB · Beijing 北京 · Shanghai 上海 · Ningbo 宁波 · VNL
           эрэгтэй финал
         </p>
-
-        <!-- Route quick strip -->
-        <div
-          class="flex items-center gap-1.5 overflow-x-auto py-2 scrollbar-none text-xs font-mono text-[#93a2bd]"
-        >
-          <span
-            class="px-2 py-1 bg-[#1b2637] border border-[#2f3f58] rounded text-[#eef2f8] whitespace-nowrap"
-            >УБ (UBN)</span
-          >
-          <span class="text-[#e05643]">✈️</span>
-          <span
-            class="px-2 py-1 bg-[#1b2637] border border-[#2f3f58] rounded text-[#eef2f8] whitespace-nowrap"
-            >PEK</span
-          >
-          <span class="text-[#3b86ef]">🚆</span>
-          <span
-            class="px-2 py-1 bg-[#1b2637] border border-[#2f3f58] rounded text-[#eef2f8] whitespace-nowrap"
-            >Beijing South</span
-          >
-          <span class="text-[#3b86ef]">🚆</span>
-          <span
-            class="px-2 py-1 bg-[#1b2637] border border-[#2f3f58] rounded text-[#eef2f8] whitespace-nowrap"
-            >Shanghai</span
-          >
-          <span class="text-[#3b86ef]">🚆</span>
-          <span
-            class="px-2 py-1 bg-[#1b2637] border border-[#2f3f58] rounded text-[#eef2f8] whitespace-nowrap"
-            >Ningbo</span
-          >
-          <span class="text-[#e0a52e]">🏐</span>
-          <span
-            class="px-2 py-1 bg-[#e0a52e]/20 border border-[#e0a52e]/40 rounded text-[#f6dfac] whitespace-nowrap"
-            >Beilun Gymnasium</span
-          >
-        </div>
       </div>
     </header>
 
@@ -125,32 +81,37 @@
       </router-view>
     </main>
 
-    <!-- Mobile Bottom Navigation Bar (Scrollable & Draggable) -->
+    <!-- Mobile Bottom Navigation Bar (Native Scroll) -->
     <div class="mobile-nav-container">
-      <div
-        ref="mobileNavRef"
-        class="mobile-nav"
-        @mousedown="onMouseDown($event, mobileNavRef)"
-        @mousemove="onMouseMove($event, mobileNavRef)"
-        @mouseup="onMouseUp"
-        @mouseleave="onMouseLeave"
-        @touchstart="onTouchStart($event, mobileNavRef)"
-        @touchmove="onTouchMove($event, mobileNavRef)"
-        @touchend="onTouchEnd"
-      >
-        <router-link
-          v-for="routeItem in navRoutes"
-          :key="routeItem.path"
-          :to="routeItem.path"
-          class="mobile-tab-item"
-          @click="onTabClick($event)"
-        >
-          <component
-            :is="getIcon(routeItem.meta.icon)"
-            class="w-5 h-5 shrink-0"
-          />
-          <span>{{ routeItem.meta.title }}</span>
-        </router-link>
+      <div class="mobile-nav-scroll-wrapper">
+        <div
+          :class="[
+            'scroll-fade',
+            'scroll-fade-left',
+            { hidden: !canScrollLeft },
+          ]"
+        ></div>
+        <div
+          :class="[
+            'scroll-fade',
+            'scroll-fade-right',
+            { hidden: !canScrollRight },
+          ]"
+        ></div>
+        <div ref="mobileNavRef" class="mobile-nav" @scroll="updateScrollFades">
+          <router-link
+            v-for="routeItem in navRoutes"
+            :key="routeItem.path"
+            :to="routeItem.path"
+            class="mobile-tab-item"
+          >
+            <component
+              :is="getIcon(routeItem.meta.icon)"
+              class="w-5 h-5 shrink-0"
+            />
+            <span>{{ routeItem.meta.title }}</span>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -178,8 +139,10 @@ const navRoutes = router.getRoutes();
 const isOnline = ref(navigator.onLine);
 const topNavRef = ref(null);
 const mobileNavRef = ref(null);
+const canScrollLeft = ref(false);
+const canScrollRight = ref(false);
 
-// Drag-to-scroll state
+// Drag-to-scroll state (top nav only)
 let isDragging = false;
 let startX = 0;
 let scrollLeft = 0;
@@ -245,7 +208,6 @@ function onTouchEnd() {
 }
 
 function onTabClick(e) {
-  // If user was dragging significantly, prevent navigation so it acts purely as drag
   if (draggedDistance > 10) {
     e.preventDefault();
   }
@@ -266,7 +228,15 @@ function scrollToActiveTab() {
         });
       }
     });
+    updateScrollFades();
   });
+}
+
+function updateScrollFades() {
+  const el = mobileNavRef.value;
+  if (!el) return;
+  canScrollLeft.value = el.scrollLeft > 4;
+  canScrollRight.value = el.scrollLeft < el.scrollWidth - el.clientWidth - 4;
 }
 
 watch(
@@ -284,6 +254,7 @@ onMounted(() => {
   window.addEventListener("online", updateOnlineStatus);
   window.addEventListener("offline", updateOnlineStatus);
   scrollToActiveTab();
+  nextTick(updateScrollFades);
 });
 
 onUnmounted(() => {

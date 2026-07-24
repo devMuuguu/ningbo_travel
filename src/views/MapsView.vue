@@ -69,7 +69,7 @@
       </div>
       <p>
         1. <b>Shanghai-д 2 өөр буудал бий:</b> Beijing-ээс
-        <b>Shanghai站 (上海站)</b>-д ирж, Ningbo руу
+        <b>Shanghai 站 (上海站)</b>-д ирж, Ningbo руу
         <b>Shanghai South (上海南站)</b>-аас гарна. Хоорондоо ~13 км зайтай тул
         андуурч болохгүй!
       </p>
