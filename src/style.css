@@ -32,6 +32,7 @@ html {
   scroll-behavior: smooth;
   background: var(--wallet);
   color: var(--sky);
+  overflow-x: hidden;
 }
 
 body {
@@ -42,6 +43,7 @@ body {
   line-height: 1.62;
   -webkit-font-smoothing: antialiased;
   padding-bottom: 80px; /* Space for mobile sticky tabbar */
+  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
