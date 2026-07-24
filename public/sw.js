@@ -1,5 +1,4 @@
 const CACHE_NAME = "ub-ningbo-v6";
-const NAV_CACHE = "ub-ningbo-nav-v1";
 const ASSETS_TO_CACHE = [
   "/manifest.json",
   "/icon.svg",
@@ -26,7 +25,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys.map((key) => {
-            if (key !== CACHE_NAME && key !== NAV_CACHE) {
+            if (key !== CACHE_NAME) {
               return caches.delete(key);
             }
           }),
@@ -37,13 +36,13 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
+  if (event.data?.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
 });
 
 function extractBundles(html) {
-  const m = html.match(/assets\/index-[^"'\s)]+/g);
+  const m = html.match(/assets\/[a-zA-Z0-9_.-]+/g);
   return m ? [...new Set(m)].sort().join("|") : "";
 }
 
@@ -57,44 +56,53 @@ self.addEventListener("fetch", (event) => {
   // Navigation: stale-while-revalidate
   if (request.mode === "navigate") {
     event.respondWith(
-      caches.open(NAV_CACHE).then(async (navCache) => {
-        const cached = await navCache.match(request);
+      caches.open(CACHE_NAME).then(async (cache) => {
+        const cached = await cache.match(request);
 
-        // Background: fetch fresh, cache it, check if bundles changed
+        // Fetch fresh copy in background
         fetch(request)
-          .then((res) => {
-            if (!res || res.status !== 200) return;
-            const freshHtml = res.clone().text();
-            navCache.put(request, res.clone());
-
-            return freshHtml;
-          })
-          .then((freshHtml) => {
-            if (!freshHtml || !cached) return;
-            return Promise.all([freshHtml, cached.text()]);
-          })
-          .then((pair) => {
-            if (!pair) return;
-            const [freshHtml, cachedHtml] = pair;
-            if (extractBundles(freshHtml) !== extractBundles(cachedHtml)) {
-              self.clients.matchAll().then((clients) => {
-                clients.forEach((c) => c.postMessage({ type: "UPDATE_AVAILABLE" }));
-              });
+          .then(async (res) => {
+            const contentType = res.headers.get("content-type");
+            if (
+              !res ||
+              res.status !== 200 ||
+              !contentType ||
+              !contentType.includes("text/html")
+            ) {
+              return;
             }
+
+            const freshHtml = await res.clone().text();
+
+            if (cached) {
+              const cachedHtml = await cached.text();
+              if (extractBundles(freshHtml) !== extractBundles(cachedHtml)) {
+                await cache.put(request, res.clone());
+                const clients = await self.clients.matchAll();
+                clients.forEach((c) =>
+                  c.postMessage({ type: "UPDATE_AVAILABLE" }),
+                );
+                return;
+              }
+            }
+
+            await cache.put(request, res.clone());
           })
           .catch(() => {});
 
         if (cached) return cached;
 
-        // First visit: must wait for network
         try {
           const fresh = await fetch(request);
           if (fresh && fresh.status === 200) {
-            navCache.put(request, fresh.clone());
+            cache.put(request, fresh.clone());
           }
           return fresh;
         } catch {
-          return new Response("Offline", { status: 503, headers: { "Content-Type": "text/html" } });
+          return new Response("Offline", {
+            status: 503,
+            headers: { "Content-Type": "text/html" },
+          });
         }
       }),
     );
