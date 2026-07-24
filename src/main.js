@@ -11,22 +11,24 @@ app.mount('#app');
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').then((reg) => {
-      // Check for SW updates on each page load
       reg.update();
 
-      // When a new SW is installed and waiting, tell it to activate immediately
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
         if (!newWorker) return;
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New SW ready — skip waiting and reload
             newWorker.postMessage({ type: 'SKIP_WAITING' });
           }
         });
       });
-    }).catch((err) => {
-      console.log('SW registration failed: ', err);
+    }).catch(() => {});
+
+    // Listen for update notifications from SW (bundle hash changed)
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+        window.location.reload();
+      }
     });
 
     // Reload once when the new SW takes over

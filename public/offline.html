@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="mn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Оффлайн</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #131b29;
+        color: #eef2f8;
+        font-family: system-ui, sans-serif;
+        text-align: center;
+        padding: 2rem;
+      }
+      .box { max-width: 360px; }
+      h1 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+      p { color: #93a2bd; font-size: 0.875rem; margin-bottom: 1.5rem; }
+      button {
+        background: #e0a52e;
+        color: #131b20;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+      button:active { opacity: 0.8; }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h1>Интернет холболтгүй байна</h1>
+      <p>Оффлайн горимд байна. Холболтоо шалгаад дахин оролдоно уу.</p>
+      <button onclick="window.location.reload()">Дахин ачаалах</button>
+    </div>
+  </body>
+</html>
