@@ -1,7 +1,6 @@
-const CACHE_NAME = "ub-ningbo-v1";
+const CACHE_NAME = "ub-ningbo-v2";
 const ASSETS_TO_CACHE = [
   "/",
-  "/index.html",
   "/manifest.json",
   "/icon.svg",
   "/beijing-shaghai_train.png",
@@ -15,9 +14,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
+      .then((cache) => cache.addAll(ASSETS_TO_CACHE))
       .then(() => self.skipWaiting()),
   );
 });
@@ -26,54 +23,49 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => {
-        return Promise.all(
-          keys.map((key) => {
-            if (key !== CACHE_NAME) {
-              return caches.delete(key);
-            }
-          }),
-        );
-      })
+      .then((keys) =>
+        Promise.all(keys.map((key) => key !== CACHE_NAME && caches.delete(key))),
+      )
       .then(() => self.clients.claim()),
   );
 });
 
+// Notify open clients when a new SW takes over
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener("fetch", (event) => {
-  // Navigation request strategy: Network first, fall back to cached index.html
+  // Network-first for navigations — ensures fresh index.html with new bundle hashes
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match("/index.html") || caches.match(event.request);
-      }),
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request)),
     );
     return;
   }
 
-  // Cache first, fallback to network for assets
+  // Cache-first for static assets (images, fonts, etc.)
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
       return fetch(event.request)
-        .then((networkResponse) => {
-          if (
-            !networkResponse ||
-            networkResponse.status !== 200 ||
-            networkResponse.type !== "basic"
-          ) {
-            return networkResponse;
+        .then((response) => {
+          if (!response || response.status !== 200 || response.type !== "basic") {
+            return response;
           }
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return networkResponse;
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
         })
-        .catch(() => {
-          // Silent catch for offline image/resource missing
-        });
+        .catch(() => new Response("", { status: 408, statusText: "Offline" }));
     }),
   );
 });
