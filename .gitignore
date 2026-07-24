@@ -1,5 +1,6 @@
 .vercel
 node_modules
+dist
 
 E-itinerary.pdf
 E-receipt.pdf
