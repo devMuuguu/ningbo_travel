@@ -25,7 +25,9 @@
       >
         <Landmark class="w-4 h-4 shrink-0" />
         <span>Үзвэр & Аялал</span>
-        <span class="text-[10px] opacity-80 font-mono hidden sm:inline">(20)</span>
+        <span class="text-[10px] opacity-80 font-mono hidden sm:inline"
+          >(20)</span
+        >
       </button>
 
       <button
@@ -39,7 +41,9 @@
       >
         <ShoppingBag class="w-4 h-4 shrink-0" />
         <span>Шопинг & Молл</span>
-        <span class="text-[10px] opacity-80 font-mono hidden sm:inline">(10)</span>
+        <span class="text-[10px] opacity-80 font-mono hidden sm:inline"
+          >(10)</span
+        >
       </button>
 
       <button
@@ -53,7 +57,9 @@
       >
         <Coffee class="w-4 h-4 shrink-0" />
         <span>Кафе & Бэйкери</span>
-        <span class="text-[10px] opacity-80 font-mono hidden sm:inline">(20)</span>
+        <span class="text-[10px] opacity-80 font-mono hidden sm:inline"
+          >(20)</span
+        >
       </button>
     </div>
 
