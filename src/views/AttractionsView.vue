@@ -12,11 +12,11 @@
 
     <!-- Category Tabs (Main Categories) -->
     <div
-      class="flex overflow-x-auto scrollbar-none gap-2 bg-[#131b29] p-1.5 rounded-xl border border-[#2f3f58]"
+      class="flex gap-1.5 sm:gap-2 bg-[#131b29] p-1.5 rounded-xl border border-[#2f3f58]"
     >
       <button
         @click="activeCategory = 'attractions'"
-        class="flex-1 shrink py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
+        class="flex-1 min-w-0 py-2 px-1 sm:px-3 rounded-lg text-[11px] sm:text-sm font-bold transition-all flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-center leading-tight"
         :class="
           activeCategory === 'attractions'
             ? 'bg-amber-500 text-black shadow-md'
@@ -25,12 +25,12 @@
       >
         <Landmark class="w-4 h-4 shrink-0" />
         <span>Үзвэр & Аялал</span>
-        <span class="text-[10px] opacity-80 font-mono">(20)</span>
+        <span class="text-[10px] opacity-80 font-mono hidden sm:inline">(20)</span>
       </button>
 
       <button
         @click="activeCategory = 'malls'"
-        class="flex-1 shrink py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
+        class="flex-1 min-w-0 py-2 px-1 sm:px-3 rounded-lg text-[11px] sm:text-sm font-bold transition-all flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-center leading-tight"
         :class="
           activeCategory === 'malls'
             ? 'bg-amber-500 text-black shadow-md'
@@ -39,12 +39,12 @@
       >
         <ShoppingBag class="w-4 h-4 shrink-0" />
         <span>Шопинг & Молл</span>
-        <span class="text-[10px] opacity-80 font-mono">(10)</span>
+        <span class="text-[10px] opacity-80 font-mono hidden sm:inline">(10)</span>
       </button>
 
       <button
         @click="activeCategory = 'cafes'"
-        class="flex-1 shrink py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 text-center whitespace-nowrap"
+        class="flex-1 min-w-0 py-2 px-1 sm:px-3 rounded-lg text-[11px] sm:text-sm font-bold transition-all flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-center leading-tight"
         :class="
           activeCategory === 'cafes'
             ? 'bg-amber-500 text-black shadow-md'
@@ -53,13 +53,13 @@
       >
         <Coffee class="w-4 h-4 shrink-0" />
         <span>Кафе & Бэйкери</span>
-        <span class="text-[10px] opacity-80 font-mono">(20)</span>
+        <span class="text-[10px] opacity-80 font-mono hidden sm:inline">(20)</span>
       </button>
     </div>
 
     <!-- Sub Filters (City & Distance) -->
     <div
-      class="flex items-center gap-2 overflow-x-auto scrollbar-none border-b border-[#2f3f58] pb-3 whitespace-nowrap"
+      class="flex flex-wrap items-center gap-2 border-b border-[#2f3f58] pb-3 whitespace-nowrap"
     >
       <button
         @click="cityFilter = 'all'"
